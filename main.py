@@ -9,7 +9,6 @@ from mission_modes import *
 # Time in seconds to sleep before initializing drivers
 SLEEP_DURATION = 1#30 * 60
 
-# TODO: initialize database
 # TODO: Query database for initial time
 db = Database()
 initial_time = None
