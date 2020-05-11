@@ -1,6 +1,5 @@
 from enum import Enum
 
-
 class MissionMode(Enum):
     PRE_TX = 0
     COMM_TX = 1

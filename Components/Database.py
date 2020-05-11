@@ -10,7 +10,10 @@ class Database(Component):
         Initializes a Database object, calls the parent constructor, and connects to a sqlite3 database.
         """
         super().__init__("Database", 1)
+        print('Initializing database...')
         self.connection = sqlite3.connect('db.sqlite3')
+        self.initdb()
+        print('Done')
 
     def update(self, context):
         """
@@ -22,117 +25,33 @@ class Database(Component):
         # TODO: write context to database
         self.connection.commit()
 
+    def read(self, table, start, end):
+        """
+        Returns values from the database from timestamp 'start' to timestamp 'end' inclusive
+        """
+        #TODO: write this
+        pass
+
     def initdb(self):
         """
-        Creates database tables if they don't exist.
-        1. A firstBoot table that stores only the first boot time
-        2. A picture table that stores the filepaths of various photos taken
-        3. A data table that stores datapoints taken by the sensors
+        Defines the database schema and creates the tables if they don't exist.
+        1. The firstBoot table that stores only the first boot time
+        2. The data table that stores datapoints taken by the sensors
         """
         cursor = self.connection.cursor()
-        try:
-            cursor.execute('''
-                CREATE TABLE firstBoot
-                (time timestamp PRIMARY KEY) [without rowid]''')
-        except:
-            pass
-
-        try:
-            cursor.execute('''
-                CREATE TABLE picture
-                (time timestamp PRIMARY KEY,
-                Packet_Type Int,
-                Mission_Mode Int,
-                Reboot_Count Int,
-                Payload_Size Int,
-                Payload_Count Int,
-                filepath text) [without rowid]''')
-        except:
-            pass
-        try:
-            cursor.execute('''
-                CREATE TABLE attitudeDetermination
-                (time timestamp PRIMARY KEY,
-                Packet_Type Int,
-                Mission_Mode Int,
-                Reboot_Count Int,
-                Payload_Size Int,
-                Payload_Count Int,
-                SS_1 Float,
-                SS_2 Float,
-                SS_3 Float,
-                SS_4 Float,
-                SS_5 Float,
-                MF_X Float,
-                MF_Y Float,
-                MF_Z Float,
-                LA_X Float,
-                LA_Y Float,
-                LA_Z Float,
-                powermode int) [without rowid]''')
-        except:
-            pass
-
-        try:
-            cursor.execute('''
-                CREATE TABLE data
-                (time timestamp PRIMARY KEY,
-                uvintensity float,
-                boomdeployed bool,
-                magx float,
-                magy float,
-                magz float,
-                magxr float,
-                magyr float,
-                magzr float,
-                battvoltage float,
-                therm0 float,
-                therm1 float,
-                therm2 float,
-                therm3 float,
-                therm4 float,
-                therm5 float,
-                therm6 float,
-                powermode int) [without rowid] ''')
-
-        except:
-            pass
-
-        try:
-            cursor.execute('''
-                CREATE TABLE housekeeping
-                (time timestamp PRIMARY KEY,
-                Packet_Type Int,
-                Mission_Mode Int,
-                Reboot_Count Int,
-                Payload_Size Int,
-                Payload_Count Int,
-                Boombox_UV Float,
-                SPX+_Temp1 Float
-                SPZ+_Temp2 Float,
-                RaspberyyPi_Temp Float,
-                EPS_MCU_Temp Float,
-                Cell_1_Battery_Temp Float,
-                Cell_2_Battery_Temp Float,
-                Cell_3_Battery_Temp Float,
-                Cell_4_Battery_Temp Float,
-                Battery_Voltage Float,
-                Battery_Current Float,
-                BCR_Voltage Float,
-                BCR_Current Float,
-                EPS_3V3_Current Float,
-                EPS5V_Current Float,
-                SPX_Voltage Float,
-                SPX+_Current Float,
-                SPX-_Current Float,
-                SPY_Voltage Float,
-                SPY+_Current Float,
-                SPY-_Current Float,
-                SPZ_Voltage Float,
-                SPZ+_Voltage Float,
-                powermode int) [without rowid] ''')
-
-        except:
-            pass
+        print('Check table: firstBoot')
+        cursor.execute(f'''
+            CREATE TABLE IF NOT EXISTS firstBoot
+            (time timestamp PRIMARY KEY)''')
+        
+        print('Check table: data')
+        cursor.execute(f'''
+            CREATE TABLE IF NOT EXISTS data
+            (time timestamp PRIMARY KEY,
+            tv_0 bool,
+            tv_1 int,
+            tv_2 float,
+            tv_3 string,
+            powermode int)''')
 
         self.connection.commit()

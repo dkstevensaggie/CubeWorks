@@ -2,14 +2,16 @@ import asyncio
 from datetime import datetime
 from time import sleep
 
-from Components import *
+from Components import ContextPrinter, Database
 from Drivers import *
 from mission_modes import *
 
 # Time in seconds to sleep before initializing drivers
 SLEEP_DURATION = 1#30 * 60
 
+# TODO: initialize database
 # TODO: Query database for initial time
+db = Database()
 initial_time = None
 
 if initial_time is None:
@@ -24,7 +26,7 @@ if delta.seconds < SLEEP_DURATION:
 async def startLoop():
     context = {"MissionMode": MissionMode.PRE_TX}
     lock = asyncio.Lock()
-    drivers = [ContextPrinter(), Magnetometer(), Camera(), cpuTemp(), adc(), uvSensor()]
+    drivers = [ContextPrinter()]
     await asyncio.gather(*[d.run(context, lock) for d in drivers])
 
 
