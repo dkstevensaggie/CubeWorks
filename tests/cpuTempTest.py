@@ -7,15 +7,17 @@ import Drivers.cpuTemp.cpuTempDriver as cpuTemp
 
 class TestCpu(unittest.TestCase): # in this case with only one function to be tested, do I really need a class?
     """
-    i have no idea what is supose to go here
+    Initializes a test case for the cpu temperature sensor
+    Defines methods that test the following:
+    1. Asserts that it returns a valid temperature.
     """
-    testCpu = cpuTemp.measureCpuTemp()
+    testCpu = cpuTemp.measureCpuTemp() # initialize
     ## this is the test of the test ##
 #    testCpu = func(50)
 
     def testCpuTemp(self):
         """
-        Asserts that the cpuTemp returns a valid tempurature between a low and a high and a low temp.
+        Asserts that the cpuTemp returns a valid temperature between a low and a high and a low temp.
         """
         lowtemp = 0
         hightemp = 100
